@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+    <title>BezKoder - Thymeleaf File Upload example</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark mb-3">
+        <a class="navbar-brand" th:href="@{/files}">
+            Bezkoder
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-targer="#topNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/files/new}">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/files}">Files</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid" style="max-width: 600px; margin: 0 auto;">
+    <h2 class="text-center">List of Files</h2>
+    <div>
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">File Name</th>
+                <th scope="col">Link</th>
+                <th scope="col">Actions</th>
+                <th scope="col">Uploaded Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="file : ${files}">
+                <td>
+                    [[${file.name}]]
+                </td>
+                <td>
+                    <a th:href="@{${file.url}}">Download</a></td>
+                <td>
+                    <a th:href="@{'/files/delete/' + ${file.name}}" th:fileName="${file.name}" class="fa-regular fa-trash-can icon-dark btn-delete" title="Delete this file"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade text-center" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <span id="confirmText"></span>
+            </div>
+
+            <div class="modal-footer">
+                <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="text-center">
+    Copyright FileUploadThymeleafApplication
+</footer>
+<script>
+    $(document).ready(function () {
+
+        $(".btn-delete").on("click", function (e) {
+            e.preventDefault();
+            const link = $(this);
+            const fileName = link.attr("fileName");
+
+            $("#yesBtn").attr("href", link.attr("href"));
+            $("#confirmText").html("Do you want to delete the File: <strong>" + fileName + "</strong>?");
+            $("#confirmModal").modal();
+        });
+
+        $("#yesBtn").on("click", function (e) {
+            e.preventDefault();
+            const href = $(this).attr("href");
+
+            $.ajax({
+                url: href,
+                type: 'DELETE',
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert("Error deleting file: " + error);
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>
