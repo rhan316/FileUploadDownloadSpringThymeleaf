@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
-public interface FilesStorageService<T> {
+public interface FilesStorageService {
 
     void init();
 
@@ -23,5 +23,5 @@ public interface FilesStorageService<T> {
 
     boolean exists(String filename);
 
-    List<T> getFiles(FilesStorageService<T> filesStorageService);
+    List<?> getFiles();
 }

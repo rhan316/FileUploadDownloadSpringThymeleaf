@@ -1,5 +1,6 @@
 package org.example.fileuploadthymeleaf.controller;
 
+import org.example.fileuploadthymeleaf.model.FileInfoRepository;
 import org.springframework.core.io.Resource;
 import org.example.fileuploadthymeleaf.model.FileInfo;
 import org.example.fileuploadthymeleaf.service.FilesStorageService;
@@ -10,17 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.util.List;
 
 @Controller
 public class FileController {
 
-    private final FilesStorageService<FileInfo> filesStorageService;
+    private final FilesStorageService filesStorageService;
 
     @Autowired
-    public FileController(FilesStorageService<FileInfo> filesStorageService) {
+    public FileController(FilesStorageService filesStorageService) {
         this.filesStorageService = filesStorageService;
     }
 
@@ -40,6 +40,7 @@ public class FileController {
         try {
 
             filesStorageService.save(file);
+
             model.addAttribute("message", "File successfully uploaded");
 
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class FileController {
 
         try {
 
-            model.addAttribute("files", filesStorageService.getFiles(filesStorageService));
+            model.addAttribute("files", filesStorageService.getFiles());
 
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
