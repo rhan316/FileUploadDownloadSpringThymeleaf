@@ -51,6 +51,7 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     }
 
     @Override
+    @Transactional
     public void save(MultipartFile file) {
 
         try {
