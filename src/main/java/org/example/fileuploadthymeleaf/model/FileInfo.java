@@ -14,16 +14,16 @@ public class FileInfo {
     private Long id;
     private String name;
     private String url;
-    private LocalDateTime dateTime;
+    private LocalDateTime date_time;
 
-    public FileInfo(String name, String url, LocalDateTime dateTime) {
+    public FileInfo(String name, String url, LocalDateTime date_time) {
         this.name = name;
         this.url = url;
-        this.dateTime = dateTime;
+        this.date_time = date_time;
     }
 
     public FileInfo() {
-        super();
+
     }
 
     public Long getId() {
@@ -51,11 +51,11 @@ public class FileInfo {
     }
 
     public LocalDateTime getDateTime() {
-        return dateTime;
+        return date_time;
     }
 
     public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+        this.date_time = dateTime;
     }
 
 }

@@ -1,6 +1,8 @@
 package org.example.fileuploadthymeleaf.controller;
 
 import org.example.fileuploadthymeleaf.model.FileInfoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.example.fileuploadthymeleaf.model.FileInfo;
 import org.example.fileuploadthymeleaf.service.FilesStorageService;
@@ -12,12 +14,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
+
 
 @Controller
 public class FileController {
 
     private final FilesStorageService filesStorageService;
+    Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     public FileController(FilesStorageService filesStorageService) {
@@ -54,8 +59,10 @@ public class FileController {
     public String getListFiles(Model model) {
 
         try {
+            
+            List<FileInfo> files = filesStorageService.getFiles();
 
-            model.addAttribute("files", filesStorageService.getFiles());
+            model.addAttribute("files", files);
 
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
@@ -84,16 +91,21 @@ public class FileController {
     @DeleteMapping("/files/delete/{filename:.+}")
     public ResponseEntity<String> deleteFile(@PathVariable String filename) {
 
+        logger.info("Attempting to delete file: {}", filename);
+
         try {
 
             if (!filesStorageService.exists(filename)) {
+                logger.warn("File not found: {}", filename);
                 return ResponseEntity.status(404).body("File not found");
             }
 
             filesStorageService.delete(filename);
+            logger.info("File deleted successfully: {}", filename);
             return ResponseEntity.ok("File deleted");
 
         } catch (Exception e) {
+            logger.error("Error deleting file: {}", filename);
             return ResponseEntity.status(500).body("Could not delete file: " + e.getMessage());
         }
 

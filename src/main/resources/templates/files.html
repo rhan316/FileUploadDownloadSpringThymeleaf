@@ -43,7 +43,7 @@
                 <th scope="col">File Name</th>
                 <th scope="col">Link</th>
                 <th scope="col">Actions</th>
-                <th scope="col">Date and Time</th>
+                <th scope="col">Created</th>
             </tr>
             </thead>
             <tbody>
@@ -56,7 +56,9 @@
                 <td>
                     <a th:href="@{'/files/delete/' + ${file.name}}" th:fileName="${file.name}" class="fa-regular fa-trash-can icon-dark btn-delete" title="Delete this file"></a>
                 </td>
-
+                <td>
+                    [[${file.dateTime}]]
+                </td>
             </tr>
             </tbody>
         </table>

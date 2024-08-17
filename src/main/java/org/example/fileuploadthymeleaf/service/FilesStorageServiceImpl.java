@@ -1,6 +1,7 @@
 package org.example.fileuploadthymeleaf.service;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.example.fileuploadthymeleaf.controller.FileController;
 import org.example.fileuploadthymeleaf.model.FileInfo;
 import org.example.fileuploadthymeleaf.model.FileInfoRepository;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService{
 
-    private final Path rootLocation = Paths.get("/src/main/resources/uploads/");
+    private final Path rootLocation = Paths.get("./uploads");
     private static final Logger logger = Logger.getLogger(FilesStorageServiceImpl.class.getName());
     private final FileInfoRepository fileInfoRepository;
 
@@ -36,8 +37,8 @@ public class FilesStorageServiceImpl implements FilesStorageService{
         this.fileInfoRepository = fileInfoRepository;
     }
 
-    @Override
     @PostConstruct
+    @Override
     public void init() {
 
         try {
@@ -118,6 +119,7 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     }
 
     @Override
+    @Transactional
     public void delete(String filename) {
 
         try {
