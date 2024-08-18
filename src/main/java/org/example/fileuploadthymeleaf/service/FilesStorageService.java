@@ -29,4 +29,5 @@ public interface FilesStorageService {
     boolean exists(String filename);
 
     List<FileInfo> getFiles();
+
 }

@@ -52,7 +52,7 @@ public class FileController {
             model.addAttribute("message", e.getMessage());
         }
 
-        return "upload_form";
+        return getListFiles(model);
     }
 
     @GetMapping("/files")
@@ -91,24 +91,25 @@ public class FileController {
     @DeleteMapping("/files/delete/{filename:.+}")
     public ResponseEntity<String> deleteFile(@PathVariable String filename) {
 
-        logger.info("Attempting to delete file: {}", filename);
-
         try {
 
             if (!filesStorageService.exists(filename)) {
-                logger.warn("File not found: {}", filename);
                 return ResponseEntity.status(404).body("File not found");
             }
 
             filesStorageService.delete(filename);
-            logger.info("File deleted successfully: {}", filename);
             return ResponseEntity.ok("File deleted");
 
         } catch (Exception e) {
-            logger.error("Error deleting file: {}", filename);
             return ResponseEntity.status(500).body("Could not delete file: " + e.getMessage());
         }
 
     }
 
+    @PostMapping("/files/delete")
+    public String deleteAllFiles() {
+        filesStorageService.deleteAll();
+
+        return "files";
+    }
 }

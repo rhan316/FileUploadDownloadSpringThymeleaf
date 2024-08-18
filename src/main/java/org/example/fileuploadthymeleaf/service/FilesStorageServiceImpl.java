@@ -13,12 +13,14 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -61,17 +63,24 @@ public class FilesStorageServiceImpl implements FilesStorageService{
                     rootLocation.resolve(Objects.requireNonNull(file.getOriginalFilename()))
             );
 
+            String fileName = file.getOriginalFilename();
+
             FileInfo fileInfo = new FileInfo(
-                    file.getOriginalFilename(),
+                    fileName,
                     MvcUriComponentsBuilder
-                            .fromMethodName(FileController.class, "getFile",
-                                    file.getOriginalFilename()).build().toString(),
-                    LocalDateTime.now()
+                            .fromMethodName(FileController.class, "getFile", fileName)
+                            .build()
+                            .toString(),
+                    this.dateTimeFormatter(LocalDateTime.now()),
+                    this.fileSize(fileName)
             );
+
+            logger.info("File saved!");
 
             fileInfoRepository.save(fileInfo);
 
         } catch (IOException e) {
+            logger.info("Cannot save file! " + e.getMessage());
             System.out.println(e.getMessage());
         }
     }
@@ -96,11 +105,15 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     }
 
     @Override
+    @Transactional
     public void deleteAll() {
 
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
-        fileInfoRepository.deleteAll();
-
+        try {
+            FileSystemUtils.deleteRecursively(rootLocation.toFile());
+            fileInfoRepository.deleteAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete files", e);
+        }
     }
 
     @Override
@@ -142,5 +155,38 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     public List<FileInfo> getFiles() {
 
         return new ArrayList<>(fileInfoRepository.findAll());
+    }
+
+    private String fileSize(String filename) {
+        String result;
+
+        try {
+
+            Path file = rootLocation.resolve(filename);
+            long fileSize = Files.size(file);
+
+            if (fileSize < 1024) {
+                result = fileSize + "B";
+            }
+            else if (fileSize < (1024 * 1024) && fileSize > 1024) {
+                double sizeKB = (double) fileSize / 1024;
+                result = String.format("%.2fKB", sizeKB);
+            }
+            else {
+                double sizeMB = (double) fileSize / (1024 * 1024);
+                result = String.format("%.2fMB", sizeMB);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    private String dateTimeFormatter(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        return localDateTime.format(formatter);
     }
 }
