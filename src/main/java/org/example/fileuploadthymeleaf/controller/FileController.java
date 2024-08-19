@@ -89,27 +89,27 @@ public class FileController {
     }
 
     @DeleteMapping("/files/delete/{filename:.+}")
-    public ResponseEntity<String> deleteFile(@PathVariable String filename) {
+    public String deleteFile(@PathVariable String filename, Model model) {
+
+
+        logger.info("Attempting to delete file: {}", filename);
 
         try {
 
             if (!filesStorageService.exists(filename)) {
-                return ResponseEntity.status(404).body("File not found");
+                logger.warn("File not found: {}", filename);
+                throw new RuntimeException("File not found!");
             }
 
             filesStorageService.delete(filename);
-            return ResponseEntity.ok("File deleted");
+            logger.info("File deleted successfully: {}", filename);
+            return getListFiles(model);
 
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Could not delete file: " + e.getMessage());
+            logger.error("Error deleting file: {}", filename);
+            throw new RuntimeException("Error: " + e.getMessage());
         }
 
     }
 
-    @PostMapping("/files/delete")
-    public String deleteAllFiles() {
-        filesStorageService.deleteAll();
-
-        return "files";
-    }
 }

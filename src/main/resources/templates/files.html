@@ -34,11 +34,6 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/files}">Files</a>
                 </li>
-                <li class="nav-item" style="">
-                    <form action="#" th:action="@{/files/delete}" method="post" class="d-inline">
-                        <button id="btn-deleteAll" type="submit" class="nav-link btn btn-link">Delete</button>
-                    </form>
-                </li>
             </ul>
         </div>
     </nav>
@@ -104,34 +99,33 @@
     Copyright FileUploadThymeleafApplication
 </footer>
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
+        $(".btn-delete").on("click", function (e) {
+            e.preventDefault();
+            link = $(this);
 
-    $(".btn-delete").on("click", function (e) {
-        e.preventDefault();
-        const link = $(this);
-        const fileName = link.attr("fileName");
+            fileName = link.attr("fileName");
+            $("#yesBtn").attr("href", link.attr("href"));
+            $("#confirmText").html("Do you want to delete: <strong>" + fileName + "</strong>?");
+            $("#confirmModal").modal();
+        });
 
-        $("#yesBtn").attr("href", link.attr("href"));
-        $("#confirmText").html("Do you want to delete the File: <strong>" + fileName + "</strong>?");
-        $("#confirmModal").modal();
-    });
-
-    $("#yesBtn").on("click", function (e) {
-        e.preventDefault();
-        const href = $(this).attr("href");
-
-        $.ajax({
-            url: href,
-            type: 'DELETE',
-            success: function (result) {
-                location.reload();
-            },
-            error: function (error) {
-                alert("Error deleting file: " + error.responseText); // Dodano error.responseText dla lepszej informacji
-            }
+        $("#yesBtn").on("click", function (e) {
+            e.preventDefault();
+            const href = $(this).attr("href");
+            $.ajax({
+                url: href,
+                type: 'DELETE',
+                success: function (result) {
+                    link.closest('tr').remove(); // Usuwa wiersz z tabeli
+                    $("#confirmModal").modal('hide'); // Zamknięcie modala
+                },
+                error: function (error) {
+                    alert("Error deleting file: " + error.responseText);
+                }
+            });
         });
     });
-});
 </script>
 </body>
 </html>

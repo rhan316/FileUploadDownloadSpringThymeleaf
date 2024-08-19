@@ -135,13 +135,14 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     @Override
     @Transactional
     public void delete(String filename) {
-
         try {
-
             Files.deleteIfExists(rootLocation.resolve(filename));
             fileInfoRepository.deleteByName(filename);
-
         } catch (IOException e) {
+            logger.severe("Could not delete file: " + filename + " - " + e.getMessage());
+            throw new RuntimeException("Could not delete file: " + filename, e);
+        } catch (Exception e) {
+            logger.severe("Error deleting file from database: " + e.getMessage());
             throw new RuntimeException("Could not delete file: " + filename, e);
         }
     }
@@ -170,11 +171,11 @@ public class FilesStorageServiceImpl implements FilesStorageService{
             }
             else if (fileSize < (1024 * 1024) && fileSize > 1024) {
                 double sizeKB = (double) fileSize / 1024;
-                result = String.format("%.2fKB", sizeKB);
+                result = String.format("%.2f KB", sizeKB);
             }
             else {
                 double sizeMB = (double) fileSize / (1024 * 1024);
-                result = String.format("%.2fMB", sizeMB);
+                result = String.format("%.2f MB", sizeMB);
             }
 
         } catch (Exception e) {

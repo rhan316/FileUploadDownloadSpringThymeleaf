@@ -13,21 +13,26 @@ public class FileInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "url")
     private String url;
-    private String date_time;
-    private String file_size;
+    @Column(name = "date_time")
+    private String dateTime;
+    @Column(name = "file_size")
+    private String fileSize;
 
-    public FileInfo(String name, String url, String date_time, String file_size) {
+    public FileInfo(String name, String url, String dateTime, String fileSize) {
         this.name = name;
         this.url = url;
-        this.date_time = date_time;
-        this.file_size = file_size;
+        this.dateTime = dateTime;
+        this.fileSize = fileSize;
     }
 
     public FileInfo() {
-
+        super();
     }
 
     public Long getId() {
@@ -55,19 +60,19 @@ public class FileInfo {
     }
 
     public String getDateTime() {
-        return date_time;
+        return dateTime;
     }
 
     public void setDateTime(String dateTime) {
-        this.date_time = dateTime;
+        this.dateTime = dateTime;
     }
 
     public void setFileSize(String fileSize) {
-        this.file_size = fileSize;
+        this.fileSize = fileSize;
     }
 
     public String getFileSize() {
-        return file_size;
+        return fileSize;
     }
 
 }

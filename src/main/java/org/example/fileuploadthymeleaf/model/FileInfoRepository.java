@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FileInfoRepository  extends ListCrudRepository<FileInfo, Long> {
+public interface FileInfoRepository  extends JpaRepository<FileInfo, Long> {
 
     void deleteByName(String fileName);
 }
