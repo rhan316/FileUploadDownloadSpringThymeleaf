@@ -30,4 +30,8 @@ public interface FilesStorageService {
 
     List<FileInfo> getFiles();
 
+    List<FileInfo> getSortedFiles(String sortBy);
+
+    void deleteAllFiles();
+
 }

@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
@@ -21,9 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -156,6 +155,49 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     public List<FileInfo> getFiles() {
 
         return new ArrayList<>(fileInfoRepository.findAll());
+    }
+
+    @Override
+    public List<FileInfo> getSortedFiles(String sortBy) {
+        List<FileInfo> files = getFiles();
+
+        return switch (sortBy) {
+            case "name" -> files.stream()
+                    .sorted(Comparator.comparing(FileInfo::getName))
+                    .toList();
+            case "size" -> files.stream()
+                    .sorted(Comparator.comparing(FileInfo::getFileSize))
+                    .toList();
+            case "date" -> files.stream()
+                    .sorted(Comparator.comparing(FileInfo::getDateTime))
+                    .toList();
+            default -> files;
+        };
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllFiles() {
+
+        if (Files.exists(rootLocation) && Files.isDirectory(rootLocation)) {
+            File folder = rootLocation.toFile();
+
+            if (folder.listFiles() != null || Objects.requireNonNull(folder.listFiles()).length != 0) {
+
+                Arrays.stream(Objects.requireNonNull(folder.listFiles()))
+                        .filter(File::isFile)
+                        .forEach(file -> {
+                            try {
+                                Files.delete(file.toPath());
+                                logger.info("File was deleted!");
+                            } catch (IOException e) {
+                                logger.warning("Cannot delete file: " + file.getName() + " - " + e.getMessage());
+                            }
+                        });
+
+                fileInfoRepository.deleteAll();
+            }
+        }
     }
 
     private String fileSize(String filename) {

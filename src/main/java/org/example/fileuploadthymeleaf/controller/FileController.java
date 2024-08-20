@@ -112,4 +112,11 @@ public class FileController {
 
     }
 
+    @DeleteMapping("/files/delete")
+    public String deleteFiles(Model model) {
+        filesStorageService.deleteAllFiles();
+
+        return getListFiles(model);
+    }
+
 }

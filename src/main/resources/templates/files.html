@@ -10,12 +10,6 @@
           crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    <style>
-        #topNavbar .nav-item:last-child {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
 </head>
 <body>
 <header>
@@ -34,12 +28,28 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/files}">Files</a>
                 </li>
+                <li>
+                    <a class="nav-link deleteAllBtn" th:href="@{/files/delete}">DeleteALL</a>
+                </li>
             </ul>
         </div>
     </nav>
 </header>
 
 <div class="container-fluid" style="max-width: 600px; margin: 0 auto;">
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle sortBtn" type="button" data-toggle="dropdown" aria-expanded="false">
+            Sort by
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Name</a>
+            <a class="dropdown-item" href="#">Size</a>
+            <a class="dropdown-item" href="#">Type</a>
+            <a class="dropdown-item" href="#">Date</a>
+        </div>
+    </div>
+
     <h2 class="text-center">List of Files</h2>
     <div>
         <table class="table table-hover">
@@ -100,6 +110,11 @@
 </footer>
 <script>
     $(document).ready(function () {
+
+        $(".sortBtn").on("click", function(e) {
+            e.preventDefault();
+        });
+
         $(".btn-delete").on("click", function (e) {
             e.preventDefault();
             link = $(this);
@@ -108,6 +123,22 @@
             $("#yesBtn").attr("href", link.attr("href"));
             $("#confirmText").html("Do you want to delete: <strong>" + fileName + "</strong>?");
             $("#confirmModal").modal();
+        });
+
+        $(".deleteAllBtn").on("click", function(e) {
+            e.preventDefault();
+            const href = $(this).attr("href");
+
+            $.ajax({
+                url: href,
+                type: 'DELETE',
+                success: function (result) {
+                    $('table tbody tr').remove();
+                },
+                error: function (error) {
+                    alert("Error deleting file: " + error.responseText);
+                }
+            });
         });
 
         $("#yesBtn").on("click", function (e) {
