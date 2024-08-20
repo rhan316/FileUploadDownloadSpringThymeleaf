@@ -2,6 +2,7 @@ package org.example.fileuploadthymeleaf.service;
 
 import jakarta.annotation.PostConstruct;
 import org.example.fileuploadthymeleaf.model.FileInfo;
+import org.example.fileuploadthymeleaf.model.FileInfoView;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,10 +29,12 @@ public interface FilesStorageService {
 
     boolean exists(String filename);
 
-    List<FileInfo> getFiles();
+    List<FileInfoView> getFiles();
 
-    List<FileInfo> getSortedFiles(String sortBy);
+    List<FileInfoView> getFiles(String sortBy);
 
     void deleteAllFiles();
+
+    String getFileType(String fileName);
 
 }

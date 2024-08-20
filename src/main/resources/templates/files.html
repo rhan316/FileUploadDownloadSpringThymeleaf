@@ -43,10 +43,9 @@
             Sort by
         </button>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Name</a>
-            <a class="dropdown-item" href="#">Size</a>
-            <a class="dropdown-item" href="#">Type</a>
-            <a class="dropdown-item" href="#">Date</a>
+            <a class="dropdown-item sort-option" data-sort="name" href="#">Name</a>
+            <a class="dropdown-item sort-option" data-sort="size" href="#">Size</a>
+            <a class="dropdown-item sort-option" data-sort="date" href="#">Date</a>
         </div>
     </div>
 
@@ -55,11 +54,12 @@
         <table class="table table-hover">
             <thead class="thead-light">
             <tr>
-                <th scope="col">File Name</th>
-                <th scope="col">Size</th>
-                <th scope="col">Link</th>
-                <th scope="col">Actions</th>
-                <th scope="col">Created</th>
+                <th scope="col" class="col-3">File Name</th>
+                <th scope="col" class="col-3">Size</th>
+                <th scope="col" class="col-1">Link</th>
+                <th scope="col" class="col-1">Actions</th>
+                <th scope="col" class="col-3">Created</th>
+                <th scope="col" class="col-1">Type</th>
             </tr>
             </thead>
             <tbody>
@@ -77,6 +77,9 @@
                 </td>
                 <td>
                     [[${file.dateTime}]]
+                </td>
+                <td>
+                    [[${file.fileType}]]
                 </td>
             </tr>
             </tbody>
@@ -111,8 +114,10 @@
 <script>
     $(document).ready(function () {
 
-        $(".sortBtn").on("click", function(e) {
+        $('.sort-option').on('click', function(e) {
             e.preventDefault();
+            const sortBy = $(this).data('sort');
+            window.location.href = `/files/sortBy/${sortBy}`;
         });
 
         $(".btn-delete").on("click", function (e) {

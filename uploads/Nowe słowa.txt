@@ -1,0 +1,97 @@
+Dzień dobry,
+
+Dziękujemy za Państwa zainteresowanie naszą ofertą. Poniżej przedstawiam szczegóły warunków handlowych naszej współpracy:
+
+Ceny i płatności
+
+Wszystkie ceny podane w naszej ofercie są cenami netto, do których należy doliczyć obowiązujący podatek VAT.
+Warunki płatności: płatność przelewem w terminie 14 dni od daty wystawienia faktury. W przypadku opóźnień w płatności zastrzegamy sobie prawo do naliczania odsetek za opóźnienie w wysokości ustawowej.
+Dostawa
+
+Dostawa do adresu: 08-110 Siedlce.
+Koszty dostawy: Dostawa jest bezpłatna.
+Termin dostawy: zgodnie z ustaleniami, nie później niż 30 dni roboczych od daty złożenia zamówienia i otrzymania potwierdzenia.
+Gwarancja i reklamacje
+
+Na wszystkie dostarczone materiały udzielamy 12-miesięcznej gwarancji od daty dostawy.
+W przypadku stwierdzenia wad materiałów, prosimy o zgłoszenie reklamacji w ciągu 14 dni od daty odkrycia wady.
+Zamówienie i anulowanie
+
+Zamówienia prosimy składać drogą elektroniczną lub telefoniczną.
+Anulowanie zamówienia jest możliwe w ciągu 48 godzin od momentu jego złożenia bez dodatkowych kosztów.
+Bezpieczeństwo i ochrona środowiska
+
+Wszystkie nasze produkty są produkowane zgodnie z obowiązującymi normami bezpieczeństwa i ochrony środowiska.
+Prosimy o potwierdzenie, czy powyższe warunki są akceptowalne oraz o przesłanie ewentualnych pytań lub uwag. Jesteśmy otwarci na dalsze negocjacje i dostosowanie warunków współpracy, aby jak najlepiej spełnić Państwa oczekiwania.
+
+
+
+LEETCODE => VpFqvrKxD08Ad5cfajXm
+
+if (numToStr.length() == 1 && !numToStr.isEmpty()) return numsSimple(numToStr.charAt(0));
+        
+        if (numToStr.length() == 2) {
+            if (numToStr.charAt(1) == '0') return numsDozens(numToStr.charAt(0));
+            
+            char firstNum = numToStr.charAt(0);
+            char secondNum = numToStr.charAt(1);
+
+            if (firstNum == '1') return numsTenToNineteen(firstNum + "" + secondNum);
+
+            return numsDozens(firstNum) + "-" + numsSimple(secondNum);
+        }
+
+        if (numToStr.length() == 3) {
+            return numsHundreds(numToStr);
+        }
+
+
+https://www.youtube.com/watch?v=q_VtZc57Zx0
+https://www.youtube.com/watch?v=CGdoeqZG8NM
+
+https://lubimyczytac.pl/ksiazka/5064768/sloneczny-gon
+https://lubimyczytac.pl/ksiazka/5060263/dar-anomalii-ksiega-1
+https://lubimyczytac.pl/ksiazka/4976770/bog-nie-jest-chetny
+https://lubimyczytac.pl/ksiazka/4954343/cien-utraconego-swiata
+
+
+bmarvinb
+meinkraft2023
+
+
+https://www.youtube.com/watch?v=i0mGsRoz94E
+
+
+RADAWA => elektroinstal@data.pl
+
+strive -> starać się
+throughout -> poprzez
+exhaustive -> wyczerpujący
+imply -> sugerować
+variety -> różnorodność
+infer -> wywnioskować 
+sparse -> rzadki
+comprehensive -> wyczerpujący, wrzechstronny
+query -> zapytanie
+consists -> składa się
+
+Rozumiem, w takim razie podkreślmy Twoje umiejętności, które są przydatne dla stanowiska sprzedawcy w sklepie rolniczo-technicznym.
+
+Oto kilka wskazówek, jak możesz stworzyć CV:
+
+    Informacje kontaktowe - na początku CV umieść swoje imię, nazwisko, adres e-mail oraz numer telefonu, aby pracodawca miał łatwy dostęp do Twoich danych kontaktowych.
+
+    Podsumowanie zawodowe - w kilku zdaniach opisz swoje cele zawodowe i co możesz zaoferować jako sprzedawca w sklepie rolniczo-technicznym.
+
+    Wykształcenie - umieść informacje o swoim wykształceniu, czy ukończyłeś szkołę średnią lub kurs związany z branżą rolniczą.
+
+    Umiejętności - w tym przypadku warto podkreślić, że znasz się na branży rolniczej i masz pasję do niej, masz umiejętności sprzedażowe, znasz się na produktach rolniczych, umiesz nawiązywać kontakty z klientami, posiadasz umiejętności negocjacyjne, jesteś cierpliwy, dokładny i rzetelny.
+
+    Języki obce - jeśli znasz język angielski lub inny język, który jest przydatny w branży rolniczej, warto umieścić tę informację w CV.
+
+    Doświadczenie - chociaż nie masz doświadczenia zawodowego, warto umieścić informacje o poprzednich pracach, które pomogą Ci podkreślić swoje umiejętności, np. praca jako wolontariusz w związku z działalnością rolniczą lub praktyki w sklepie rolniczym.
+
+    Zainteresowania - podkreśl swoje zainteresowania związane z branżą rolniczą, takie jak uprawa warzyw i owoców lub hodowla zwierząt, co pokaże, że jesteś pasjonatem tego tematu.
+
+Pamiętaj, aby CV było przejrzyste, czytelne i starannie opracowane. Powinno zawierać informacje, które są istotne dla stanowiska, na które aplikujesz. Życzę powodzenia w procesie rekrutacyjnym!
+

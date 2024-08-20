@@ -1,6 +1,7 @@
 package org.example.fileuploadthymeleaf.controller;
 
 import org.example.fileuploadthymeleaf.model.FileInfoRepository;
+import org.example.fileuploadthymeleaf.model.FileInfoView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -60,10 +61,22 @@ public class FileController {
 
         try {
             
-            List<FileInfo> files = filesStorageService.getFiles();
+            List<FileInfoView> files = filesStorageService.getFiles();
 
             model.addAttribute("files", files);
 
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
+
+        return "files";
+    }
+
+    @GetMapping("/files/sortBy/{sortBy:.+}")
+    public String getSortedFilesBy(@PathVariable String sortBy, Model model) {
+        try {
+            List<FileInfoView> files = filesStorageService.getFiles(sortBy);
+            model.addAttribute("files", files);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }

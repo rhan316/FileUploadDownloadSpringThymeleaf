@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.example.fileuploadthymeleaf.controller.FileController;
 import org.example.fileuploadthymeleaf.model.FileInfo;
 import org.example.fileuploadthymeleaf.model.FileInfoRepository;
+import org.example.fileuploadthymeleaf.model.FileInfoView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -70,9 +71,10 @@ public class FilesStorageServiceImpl implements FilesStorageService{
                             .fromMethodName(FileController.class, "getFile", fileName)
                             .build()
                             .toString(),
-                    this.dateTimeFormatter(LocalDateTime.now()),
-                    this.fileSize(fileName)
-            );
+                    LocalDateTime.now(),
+                    Files.size(rootLocation.resolve(fileName)),
+                    this.getFileType(fileName)
+                    );
 
             logger.info("File saved!");
 
@@ -152,24 +154,33 @@ public class FilesStorageServiceImpl implements FilesStorageService{
     }
 
     @Override
-    public List<FileInfo> getFiles() {
+    public List<FileInfoView> getFiles() {
 
-        return new ArrayList<>(fileInfoRepository.findAll());
+        List<FileInfo> files = fileInfoRepository.findAll();
+
+        return files.stream()
+                .map(file -> new FileInfoView(
+                        file.getName(),
+                        file.getUrl(),
+                        this.dateTimeFormatter(file.getDateTime()),
+                        this.fileSize(file.getName()),
+                        file.getFileType()
+                )).toList();
     }
 
     @Override
-    public List<FileInfo> getSortedFiles(String sortBy) {
-        List<FileInfo> files = getFiles();
+    public List<FileInfoView> getFiles(String sortBy) {
+        List<FileInfoView> files = getFiles();
 
         return switch (sortBy) {
             case "name" -> files.stream()
-                    .sorted(Comparator.comparing(FileInfo::getName))
+                    .sorted(Comparator.comparing(FileInfoView::getName))
                     .toList();
             case "size" -> files.stream()
-                    .sorted(Comparator.comparing(FileInfo::getFileSize))
+                    .sorted(Comparator.comparing(FileInfoView::getFileSize))
                     .toList();
             case "date" -> files.stream()
-                    .sorted(Comparator.comparing(FileInfo::getDateTime))
+                    .sorted(Comparator.comparing(FileInfoView::getDateTime))
                     .toList();
             default -> files;
         };
@@ -183,7 +194,7 @@ public class FilesStorageServiceImpl implements FilesStorageService{
             File folder = rootLocation.toFile();
 
             if (folder.listFiles() != null || Objects.requireNonNull(folder.listFiles()).length != 0) {
-
+                // TODO: Check if rootLocation contains folders
                 Arrays.stream(Objects.requireNonNull(folder.listFiles()))
                         .filter(File::isFile)
                         .forEach(file -> {
@@ -198,6 +209,21 @@ public class FilesStorageServiceImpl implements FilesStorageService{
                 fileInfoRepository.deleteAll();
             }
         }
+    }
+
+    @Override
+    public String getFileType(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            throw new NullPointerException("File name is null or empty!");
+        }
+
+        int lastIndex = fileName.lastIndexOf(".");
+
+        if (lastIndex == -1 || lastIndex == fileName.length() - 1) {
+            throw new IllegalArgumentException("Incorrect file name!");
+        }
+
+        return fileName.substring(lastIndex + 1).toLowerCase();
     }
 
     private String fileSize(String filename) {

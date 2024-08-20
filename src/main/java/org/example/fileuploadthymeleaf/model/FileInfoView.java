@@ -1,42 +1,22 @@
 package org.example.fileuploadthymeleaf.model;
 
-import jakarta.persistence.*;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-@Entity
-@Table(name = "files")
-public class FileInfo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class FileInfoView {
+// TODO: Add type of file by ENUM -> Type
     private Long id;
-    @Column(name = "name")
     private String name;
-    @Column(name = "url")
     private String url;
-    @Column(name = "date_time")
-    private LocalDateTime dateTime;
-    @Column(name = "file_size")
-    private double fileSize;
-
-    @Column(name = "file_type")
+    private String dateTime;
+    private String fileSize;
     private String fileType;
 
-    public FileInfo(String name, String url, LocalDateTime dateTime, double fileSize, String fileType) {
+    public FileInfoView(String name, String url, String dateTime, String fileSize, String fileType) {
         this.name = name;
         this.url = url;
         this.dateTime = dateTime;
         this.fileSize = fileSize;
         this.fileType = fileType;
-    }
-
-    public FileInfo() {
-        super();
     }
 
     public Long getId() {
@@ -63,20 +43,20 @@ public class FileInfo {
         this.url = url;
     }
 
-    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
-    public void setFileSize(double fileSize) {
-        this.fileSize = fileSize;
+    public String getFileSize() {
+        return fileSize;
     }
 
-    public double getFileSize() {
-        return fileSize;
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
     }
 
     public String getFileType() {
